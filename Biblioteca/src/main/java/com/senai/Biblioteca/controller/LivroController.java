@@ -1,5 +1,7 @@
 package com.senai.Biblioteca.controller;
 
+import com.senai.Biblioteca.dto.Livro.LivroRequest;
+import com.senai.Biblioteca.dto.Livro.LivroResponse;
 import com.senai.Biblioteca.model.Livro;
 import com.senai.Biblioteca.service.LivroService;
 import org.springframework.web.bind.annotation.*;
@@ -18,16 +20,16 @@ public class LivroController {
     }
 
     @PostMapping
-    public Livro save (@RequestBody Livro Livro){
+    public Livro save (@RequestBody LivroRequest request){
         try {
-            return service.salvar(Livro);
+            return service.salvar(request);
         }catch (SQLException e){
             throw new RuntimeException(e.getMessage());
         }
     }
 
     @GetMapping
-    public List<Livro> list (){
+    public List<LivroResponse> list (){
         try {
             return service.listarTodos();
         }catch (SQLException e){
@@ -36,7 +38,7 @@ public class LivroController {
     }
 
     @GetMapping("/{id}")
-    public Livro findById(
+    public LivroResponse findById(
             @PathVariable long id){
         try{
             return service.buscarPorId(id);
@@ -47,9 +49,9 @@ public class LivroController {
 
     @PutMapping("/{id}")
     public void update (
-            @PathVariable long id, @RequestBody Livro livro){
+            @PathVariable long id, @RequestBody LivroRequest request){
         try {
-            service.atualizar(id, livro);
+            service.atualizar(id, request);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

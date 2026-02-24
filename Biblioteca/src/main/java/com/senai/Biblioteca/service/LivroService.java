@@ -2,6 +2,9 @@ package com.senai.Biblioteca.service;
 
 import com.senai.Biblioteca.dao.LivroRepository;
 import com.senai.Biblioteca.dao.UsuarioRepository;
+import com.senai.Biblioteca.dto.Livro.LivroRequest;
+import com.senai.Biblioteca.dto.Livro.LivroResponse;
+import com.senai.Biblioteca.mapper.LivroMapper;
 import com.senai.Biblioteca.model.Livro;
 import com.senai.Biblioteca.model.Usuario;
 import org.springframework.stereotype.Service;
@@ -12,29 +15,35 @@ import java.util.List;
 @Service
 public class LivroService {
 
-    private LivroRepository repository;
+    private final LivroRepository repository;
+    private final LivroMapper mapper;
 
-    public LivroService(LivroRepository repository) {
+    public LivroService(LivroRepository repository, LivroMapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
-    public Livro salvar(Livro Livro) throws SQLException {
-        return repository.salvar(Livro);
+    public Livro salvar(LivroRequest request) throws SQLException {
+        Livro livro = mapper.paraEntidade(request);
+        return repository.salvar(livro);
     }
 
-    public List<Livro> listarTodos () throws SQLException {
+    public List<LivroResponse> listarTodos () throws SQLException {
         return repository.listarTodos();
     }
 
-    public Livro buscarPorId (Long id) throws SQLException {
+    public LivroResponse buscarPorId (Long id) throws SQLException {
         return repository.buscarPorId(id);
     }
 
-    public void atualizar(Long id, Livro livro) throws SQLException{
-        Livro LivroNoBanco = repository.buscarPorId(id);
-        LivroNoBanco.update(livro.getTitulo(), livro.getAutor(), livro.getAnoPublicacao());
+    public void atualizar(Long id, LivroRequest livro) throws SQLException{
 
-        repository.atualizar(id, LivroNoBanco);
+        LivroResponse livroNoBanco = repository.buscarPorId(id);
+        Livro livroAtualizado = mapper.paraEntidade(livroNoBanco);
+
+        livroAtualizado.update(livro.titulo(), livro.autor(), livro.anoPublicacao());
+
+        repository.atualizar(id, livroAtualizado);
     }
 
     public void deletar(Long id) throws SQLException{

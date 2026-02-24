@@ -1,5 +1,6 @@
 package com.senai.Biblioteca.dao;
 
+import com.senai.Biblioteca.dto.Livro.LivroResponse;
 import com.senai.Biblioteca.model.Emprestimo;
 import com.senai.Biblioteca.model.Livro;
 import com.senai.Biblioteca.utils.Conexao;
@@ -34,9 +35,9 @@ public class LivroRepository {
         return null;
     };
 
-    public List<Livro> listarTodos() throws SQLException{
+    public List<LivroResponse> listarTodos() throws SQLException{
         String sql = "SELECT id, titulo, autor, ano_publicacao FROM livro";
-        List<Livro> livros = new ArrayList<>();
+        List<LivroResponse> livros = new ArrayList<>();
 
         try (Connection connection = Conexao.conectar();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -44,22 +45,22 @@ public class LivroRepository {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                Livro livro = new Livro(
+                LivroResponse rsponse = new LivroResponse(
                         resultSet.getLong(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
                         resultSet.getInt(4)
                 );
-                livros.add(livro);
+                livros.add(rsponse);
             }
         }
 
         return livros;
     };
 
-    public Livro buscarPorId (Long id) throws SQLException{
+    public LivroResponse buscarPorId (Long id) throws SQLException{
         String sql = "SELECT id, titulo, autor, ano_publicacao FROM livro WHERE id = ?";
-        Livro livro;
+        LivroResponse response;
 
         try (Connection connection = Conexao.conectar();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -69,14 +70,14 @@ public class LivroRepository {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                livro = new Livro(
+                response = new LivroResponse(
                         resultSet.getLong(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
                         resultSet.getInt(4)
                 );
 
-                return livro;
+                return response;
             }
         }
 
