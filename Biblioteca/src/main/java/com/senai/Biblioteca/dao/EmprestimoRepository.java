@@ -65,11 +65,35 @@ public class EmprestimoRepository {
         return emprestimos;
     };
 
-    public Emprestimo buscarPorId (int id){
+    public Emprestimo buscarPorId (int id) throws SQLException {
+
+        String sql = "SELECT id, livro_id, usuario_id, data_emprestimo, data_devolucao FROM emprestimo";
+
+        try(Connection connection = Conexao.conectar();
+        PreparedStatement statement = connection.prepareStatement(sql)){
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()){
+                return new Emprestimo(
+                        resultSet.getLong(1),
+                        resultSet.getLong(2),
+                        resultSet.getLong(3),
+                        (LocalDate) resultSet.getObject(3),
+                        (LocalDate) resultSet.getObject(4)
+                );
+            }
+
+        }
+
         return null;
     }
 
-    public void atualizar (long id, Emprestimo emprestimo){}
+    public void atualizar (long id, Emprestimo emprestimo){
 
-    public void deletar (long id){}
+    }
+
+    public void deletar (long id){
+
+    }
 }

@@ -30,7 +30,8 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public List<UsuarioResponse> list (){
+    public List<UsuarioResponse
+            > list (){
         try {
             return service.listarTodos();
         }catch (SQLException e){
