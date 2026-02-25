@@ -1,5 +1,6 @@
 package com.senai.Biblioteca.dao;
 
+import com.senai.Biblioteca.dto.usuario.UsuarioResponse;
 import com.senai.Biblioteca.model.Usuario;
 import com.senai.Biblioteca.utils.Conexao;
 import org.springframework.stereotype.Repository;

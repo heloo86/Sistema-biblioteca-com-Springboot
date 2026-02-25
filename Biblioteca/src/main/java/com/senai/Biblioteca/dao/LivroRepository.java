@@ -35,9 +35,9 @@ public class LivroRepository {
         return null;
     };
 
-    public List<LivroResponse> listarTodos() throws SQLException{
+    public List<Livro> listarTodos() throws SQLException{
         String sql = "SELECT id, titulo, autor, ano_publicacao FROM livro";
-        List<LivroResponse> livros = new ArrayList<>();
+        List<Livro> livros = new ArrayList<>();
 
         try (Connection connection = Conexao.conectar();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -45,22 +45,22 @@ public class LivroRepository {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                LivroResponse rsponse = new LivroResponse(
+                Livro livro = new Livro(
                         resultSet.getLong(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
                         resultSet.getInt(4)
                 );
-                livros.add(rsponse);
+                livros.add(livro);
             }
         }
 
         return livros;
     };
 
-    public LivroResponse buscarPorId (Long id) throws SQLException{
+    public Livro buscarPorId (Long id) throws SQLException{
         String sql = "SELECT id, titulo, autor, ano_publicacao FROM livro WHERE id = ?";
-        LivroResponse response;
+        Livro livro;
 
         try (Connection connection = Conexao.conectar();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -70,14 +70,14 @@ public class LivroRepository {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                response = new LivroResponse(
+                livro = new Livro(
                         resultSet.getLong(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
                         resultSet.getInt(4)
                 );
 
-                return response;
+                return livro;
             }
         }
 

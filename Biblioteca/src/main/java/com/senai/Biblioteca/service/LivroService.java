@@ -1,12 +1,10 @@
 package com.senai.Biblioteca.service;
 
 import com.senai.Biblioteca.dao.LivroRepository;
-import com.senai.Biblioteca.dao.UsuarioRepository;
 import com.senai.Biblioteca.dto.Livro.LivroRequest;
 import com.senai.Biblioteca.dto.Livro.LivroResponse;
 import com.senai.Biblioteca.mapper.LivroMapper;
 import com.senai.Biblioteca.model.Livro;
-import com.senai.Biblioteca.model.Usuario;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -23,27 +21,34 @@ public class LivroService {
         this.mapper = mapper;
     }
 
-    public Livro salvar(LivroRequest request) throws SQLException {
+    public LivroResponse salvar(LivroRequest request) throws SQLException {
         Livro livro = mapper.paraEntidade(request);
-        return repository.salvar(livro);
+        Livro livroSalvo = repository.salvar(livro);
+        return  mapper.paraResposta(livroSalvo);
     }
 
     public List<LivroResponse> listarTodos () throws SQLException {
-        return repository.listarTodos();
+
+        List<Livro> livros = repository.listarTodos();
+
+        return livros.stream()
+                .map(mapper::paraResposta)
+                .toList();
     }
 
     public LivroResponse buscarPorId (Long id) throws SQLException {
-        return repository.buscarPorId(id);
+        LivroResponse response = mapper.paraResposta(
+                repository.buscarPorId(id)
+        );
+        return response;
     }
 
     public void atualizar(Long id, LivroRequest livro) throws SQLException{
 
-        LivroResponse livroNoBanco = repository.buscarPorId(id);
-        Livro livroAtualizado = mapper.paraEntidade(livroNoBanco);
+        Livro livroNoBanco = repository.buscarPorId(id);
+        livroNoBanco.update(livro.titulo(), livro.autor(), livro.anoPublicacao());
 
-        livroAtualizado.update(livro.titulo(), livro.autor(), livro.anoPublicacao());
-
-        repository.atualizar(id, livroAtualizado);
+        repository.atualizar(id, livroNoBanco);
     }
 
     public void deletar(Long id) throws SQLException{

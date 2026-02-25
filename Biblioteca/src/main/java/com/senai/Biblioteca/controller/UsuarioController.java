@@ -1,5 +1,7 @@
 package com.senai.Biblioteca.controller;
 
+import com.senai.Biblioteca.dto.usuario.UsuarioRequest;
+import com.senai.Biblioteca.dto.usuario.UsuarioResponse;
 import com.senai.Biblioteca.model.Usuario;
 import com.senai.Biblioteca.service.UsuarioService;
 import org.springframework.stereotype.Controller;
@@ -19,16 +21,16 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public Usuario save (@RequestBody Usuario usuario){
+    public UsuarioResponse save (@RequestBody UsuarioRequest request){
         try {
-            return service.salvar(usuario);
+            return service.salvar(request);
         }catch (SQLException e){
             throw new RuntimeException(e.getMessage());
         }
     }
 
     @GetMapping
-    public List<Usuario> list (){
+    public List<UsuarioResponse> list (){
         try {
             return service.listarTodos();
         }catch (SQLException e){
@@ -37,7 +39,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public Usuario findById(
+    public UsuarioResponse findById(
             @PathVariable long id){
         try{
             return service.buscarPorId(id);
@@ -48,9 +50,9 @@ public class UsuarioController {
 
     @PutMapping("/{id}")
     public void update (
-            @PathVariable long id, @RequestBody Usuario usuario){
+            @PathVariable long id, @RequestBody UsuarioRequest request){
         try {
-            service.atualizar(id, usuario);
+            service.atualizar(id, request);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

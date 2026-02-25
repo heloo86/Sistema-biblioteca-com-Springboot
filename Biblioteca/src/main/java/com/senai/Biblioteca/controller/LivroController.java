@@ -20,7 +20,7 @@ public class LivroController {
     }
 
     @PostMapping
-    public Livro save (@RequestBody LivroRequest request){
+    public LivroResponse save (@RequestBody LivroRequest request){
         try {
             return service.salvar(request);
         }catch (SQLException e){

@@ -6,7 +6,7 @@ import com.senai.Biblioteca.model.Livro;
 
 public class LivroMapper {
 
-    public static Livro paraEntidade(LivroRequest dto){
+    public Livro paraEntidade(LivroRequest dto){
         Livro livro = new Livro(
                 dto.titulo(),
                 dto.autor(),
@@ -15,7 +15,7 @@ public class LivroMapper {
         return livro;
     }
 
-    public static Livro paraEntidade(LivroResponse dto){
+    public  Livro paraEntidade(LivroResponse dto){
         Livro livro = new Livro(
                 dto.titulo(),
                 dto.autor(),
@@ -24,7 +24,7 @@ public class LivroMapper {
         return livro;
     }
 
-    public static LivroResponse paraResposta(Livro livro){
+    public LivroResponse paraResposta(Livro livro){
         LivroResponse response = new LivroResponse(
                 livro.getId(),
                 livro.getTitulo(),
